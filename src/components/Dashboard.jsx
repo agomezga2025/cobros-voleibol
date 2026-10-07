@@ -65,8 +65,8 @@ const Dashboard = ({ user }) => {
       .lte('created_at', prevMonthEnd.toISOString())
 
     if (!prevError && prevData) {
-      const prevTotal = prevData.reduce((sum, charge) => sum + (charge.actual_charge || charge.should_charge || 0), 0)
-      const currentTotal = currentData.reduce((sum, charge) => sum + (charge.actual_charge || charge.should_charge || 0), 0)
+      const prevTotal = prevData.reduce((sum, charge) => sum + (charge.amount || 0), 0)
+      const currentTotal = currentData.reduce((sum, charge) => sum + (charge.amount || 0), 0)
       setMonthComparison(currentTotal - prevTotal)
     }
 
@@ -77,8 +77,8 @@ const Dashboard = ({ user }) => {
       if (!grouped[category]) {
         grouped[category] = { name: CATEGORY_LABELS[category], value: 0, amount: 0 }
       }
-      grouped[category].amount += charge.actual_charge || charge.should_charge || 0
-      grouped[category].value += charge.actual_charge || charge.should_charge || 0
+        grouped[category].amount += charge.amount || 0
+        grouped[category].value += charge.amount || 0
     })
 
     setChargesData(Object.values(grouped))
