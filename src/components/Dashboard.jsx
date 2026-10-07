@@ -75,7 +75,7 @@ const Dashboard = ({ user }) => {
     currentData.forEach(charge => {
       const category = charge.category || 'otros'
       if (!grouped[category]) {
-        grouped[category] = { name: CATEGORY_LABELS[category], value: 0, amount: 0 }
+        grouped[category] = { name: CATEGORY_LABELS[category], category: category, value: 0, amount: 0 }
       }
         grouped[category].amount += charge.amount || 0
         grouped[category].value += charge.amount || 0
@@ -167,7 +167,7 @@ const Dashboard = ({ user }) => {
                     dataKey="value"
                   >
                     {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[chargesData[index].name.toLowerCase().replace('á', 'a')]} />
+                      <Cell key={`cell-${index}`} fill={COLORS[chargesData[index].category]} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value) => `${value.toFixed(2)}€`} />
