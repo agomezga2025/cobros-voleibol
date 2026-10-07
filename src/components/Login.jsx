@@ -16,7 +16,7 @@ export default function Login({ onLoginSuccess, onToggleToRegister }) {
     try {
       // Generar email válido desde username
       // Formato: username+cobros@example.com (Supabase lo acepta)
-      const generatedEmail = `${username.toLowerCase().replace(/\s+/g, '.')}+cobros@example.com`
+      const generatedEmail = `${username.toLowerCase().replace(/\s+/g, '.')}@voleibol.com`
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: generatedEmail,
