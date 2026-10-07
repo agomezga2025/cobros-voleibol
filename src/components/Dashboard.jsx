@@ -189,13 +189,7 @@ const Dashboard = ({ user }) => {
                   <div
                     className="legend-color"
                     style={{
-                      backgroundColor: COLORS[
-                        item.name.toLowerCase()
-                          .replace('á', 'a')
-                          .replace('entrenó', 'entrenamiento')
-                          .replace('árbitro', 'arbitraje')
-                          .replace('despio', 'otros')
-                      ]
+                     backgroundColor: COLORS[item.category]
                     }}
                   ></div>
                   <span className="legend-label">{item.name}</span>
