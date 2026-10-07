@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
-import Login from './components/login'
+import Login from './components/Login'
 import RegistroCobros from './components/RegistroCobros'
 
 function App() {
