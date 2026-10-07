@@ -1,6 +1,6 @@
-// NUEVO (desde CDN)
+import { createClient } from '@supabase/supabase-js'
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Supabase se carga globalmente desde CDN
-export const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
