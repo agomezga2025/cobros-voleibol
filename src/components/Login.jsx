@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 import '../styles/Login.css'
 
-export default function Login({ onLoginSuccess }) {
+export default function Login({ onLoginSuccess, onToggleToRegister }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -74,7 +74,13 @@ export default function Login({ onLoginSuccess }) {
           </button>
         </form>
 
-        <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>
+        <button
+          onClick={onToggleToRegister}
+          className="forgot-password"
+          style={{ textDecoration: 'underline', fontSize: '14px' }}
+        >
+          ¿No tienes cuenta? Regístrate
+        </button>
 
         <div className="login-footer-text">
           <p>Aplicación para gestionar tus cobros como entrenador de voleibol</p>

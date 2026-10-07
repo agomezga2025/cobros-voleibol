@@ -116,13 +116,16 @@ export default function Register({ onRegisterSuccess, onToggleToLogin }) {
           </button>
         </form>
 
+        <button
+          onClick={onToggleToLogin}
+          className="forgot-password"
+          style={{ textDecoration: 'underline', fontSize: '14px' }}
+        >
+          ¿Ya tienes cuenta? Entra aquí
+        </button>
+
         <div className="login-footer-text">
-          <button
-            onClick={onToggleToLogin}
-            className="toggle-auth-link"
-          >
-            ¿Ya tienes cuenta? Entra aquí
-          </button>
+          <p>Aplicación para gestionar tus cobros como entrenador de voleibol</p>
           <p className="copyright">© 2026 Voleibol Coaching</p>
         </div>
       </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { supabase } from './supabaseClient'
 import Login from './components/Login'
+import Register from './components/Register'
 import Dashboard from './components/Dashboard'
 import RegistroCobros from './components/RegistroCobros'
 import Historico from './components/Historico'
@@ -11,6 +12,7 @@ import './App.css'
 function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isRegister, setIsRegister] = useState(false)
 
   useEffect(() => {
     // Check if user is logged in on component mount
@@ -47,7 +49,17 @@ function App() {
   }
 
   if (!user) {
-    return <Login />
+    return isRegister ? (
+      <Register
+        onRegisterSuccess={() => setIsRegister(false)}
+        onToggleToLogin={() => setIsRegister(false)}
+      />
+    ) : (
+      <Login
+        onLoginSuccess={(user) => setUser(user)}
+        onToggleToRegister={() => setIsRegister(true)}
+      />
+    )
   }
 
   return (
