@@ -2,11 +2,14 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #2d5016 0%, #1a2e0a 100%);
   padding: 20px;
-  padding-bottom: 80px;
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(100px, calc(90px + env(safe-area-inset-bottom)));
   display: flex;
   flex-direction: column;
   color: #fff;
   font-family: 'Poppins', sans-serif;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dashboard-header {
@@ -240,6 +243,8 @@
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 16px;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(100px, calc(90px + env(safe-area-inset-bottom)));
   }
 
   .dashboard-title {

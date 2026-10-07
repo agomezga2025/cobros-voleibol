@@ -2,9 +2,12 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #2d5016 0%, #1a2e0a 100%);
   padding: 20px;
-  padding-bottom: 90px;
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(100px, calc(90px + env(safe-area-inset-bottom)));
   font-family: 'Poppins', sans-serif;
   color: #fff;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .registro-header {
@@ -108,7 +111,7 @@
 }
 
 .date-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 0, 0.787);
 }
 
 /* CATEGORY BUTTONS */
@@ -206,7 +209,7 @@
 }
 
 .detail-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(0, 0, 0, 0.787);
 }
 
 /* AMOUNT INPUT */
@@ -238,7 +241,7 @@
 }
 
 .amount-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 0, 0.787);
 }
 
 .currency {
@@ -358,7 +361,8 @@
 @media (max-width: 768px) {
   .registro-container {
     padding: 16px;
-    padding-bottom: 90px;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(100px, calc(90px + env(safe-area-inset-bottom)));
   }
 
   .registro-header {
@@ -413,23 +417,6 @@
   .total-amount {
     font-size: 32px;
   }
-}
-
-
-.date-input::placeholder {
-  color: rgba(0, 0, 0, 0.787);  /* Blanco semi-transparente */
-}
-
-.amount-input::placeholder {
- color: rgba(0, 0, 0, 0.787);
-}
-
-.detail-input::placeholder {
-  color: rgba(0, 0, 0, 0.787);  /* Más oscuro */
-}
-
-.description-input::placeholder {
-  color: rgba(0, 0, 0, 0.787);
 }
 
 .checkbox-text, .usuario-nombre{
