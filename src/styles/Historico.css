@@ -1,0 +1,184 @@
+.historico-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2d5016 0%, #1a2e0a 100%);
+  padding: 20px;
+  padding-bottom: 80px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.historico-header {
+  margin-bottom: 24px;
+}
+
+.historico-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.total-count {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(165, 138, 74, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background: rgba(165, 138, 74, 0.2);
+  border-color: #a58a4a;
+  color: #d4a574;
+}
+
+.filter-btn.active {
+  background: #a58a4a;
+  border-color: #d4a574;
+  color: #1a2e0a;
+  font-weight: 600;
+}
+
+.charges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.charge-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(165, 138, 74, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s;
+}
+
+.charge-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(165, 138, 74, 0.4);
+}
+
+.charge-category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.charge-info {
+  flex: 1;
+}
+
+.charge-category {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d4a574;
+  margin-bottom: 4px;
+}
+
+.charge-date {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.charge-description {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.charge-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #a58a4a;
+}
+
+.amount-status {
+  font-size: 12px;
+  color: #8ec34a;
+}
+
+.delete-btn {
+  background: rgba(255, 69, 69, 0.2);
+  border: 1px solid rgba(255, 69, 69, 0.3);
+  color: #ff6b6b;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-weight: bold;
+}
+
+.delete-btn:hover {
+  background: rgba(255, 69, 69, 0.3);
+  border-color: rgba(255, 69, 69, 0.5);
+}
+
+.loading,
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+}
+
+.no-data {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px dashed rgba(165, 138, 74, 0.2);
+}
+
+@media (max-width: 768px) {
+  .historico-container {
+    padding: 16px;
+  }
+
+  .historico-header h1 {
+    font-size: 24px;
+  }
+
+  .charge-item {
+    padding: 12px;
+  }
+
+  .amount {
+    font-size: 14px;
+  }
+}

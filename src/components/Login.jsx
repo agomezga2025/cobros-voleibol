@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
+import '../styles/Login.css'
 
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('')
@@ -19,7 +20,6 @@ export default function Login({ onLoginSuccess }) {
       })
 
       if (error) throw error
-
       onLoginSuccess(data.user)
     } catch (err) {
       setError(err.message)
@@ -28,65 +28,56 @@ export default function Login({ onLoginSuccess }) {
     }
   }
 
-  const handleSignUp = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      })
-
-      if (error) throw error
-      setError('¡Revisa tu email para confirmar!')
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
-      <h1>Login - Cobros Voleibol</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: '12px' }}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: '100%', padding: '8px', marginBottom: '8px' }}
-          />
+    <div className="login-bg">
+      <div className="login-container">
+        <p className="label-small">GESTOR DE COBROS</p>
+        
+        <h1 className="login-title">Bienvenido<br/>Entrenador</h1>
+
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label className="form-label">USUARIO</label>
+            <input
+              type="email"
+              placeholder="tu_usuario"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="form-input"
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">CONTRASEÑA</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="form-input"
+            />
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          <button 
+            type="submit" 
+            className="btn-acceder"
+            disabled={loading}
+          >
+            {loading ? 'Entrando...' : 'ACCEDER'}
+          </button>
+        </form>
+
+        <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>
+
+        <div className="login-footer-text">
+          <p>Aplicación para gestionar tus cobros como entrenador de voleibol</p>
+          <p className="copyright">© 2026 Voleibol Coaching</p>
         </div>
-        <div style={{ marginBottom: '12px' }}>
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '8px' }}
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ width: '100%', padding: '10px', marginBottom: '8px' }}
-        >
-          {loading ? 'Entrando...' : 'Entrar'}
-        </button>
-        <button
-          type="button"
-          onClick={handleSignUp}
-          disabled={loading}
-          style={{ width: '100%', padding: '10px' }}
-        >
-          {loading ? 'Creando...' : 'Crear Cuenta'}
-        </button>
-      </form>
+      </div>
     </div>
   )
 }
