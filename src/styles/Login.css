@@ -155,3 +155,28 @@
     max-width: 90%;
   }
 }
+
+.success-message {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.toggle-auth-link {
+  background: none;
+  border: none;
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.toggle-auth-link:hover {
+  color: #0052a3;
+}
