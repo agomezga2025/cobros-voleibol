@@ -11,19 +11,17 @@ const Dashboard = ({ user }) => {
   const [showMonthPicker, setShowMonthPicker] = useState(false)
 
   const COLORS = {
-    'partido-casa': '#2d5016',
-    'partido-fuera': '#4a7c2f',
-    'entrenamiento': '#a58a4a',
-    'arbitraje': '#d4a574',
-    'gasolina': '#8b7355',
-    'otros': '#c9b8a3'
+    'partido': '#504016',
+    'entrenamiento': '#4a87a5',
+    'arbitraje': '#d4748e',
+    'gasolina': '#8b5588',
+    'otros': '#c3c9a3'
   }
 
   const CATEGORY_LABELS = {
-    'partido-casa': 'Costo',
-    'partido-fuera': 'Fuera',
-    'entrenamiento': 'Entrenamiento',
-    'arbitraje': 'Árbitro',
+    'partido': 'Partidos',
+    'entrenamiento': 'Entrenamientos',
+    'arbitraje': 'Árbitros',
     'gasolina': 'Gasolina',
     'otros': 'Otros'
   }
@@ -153,7 +151,7 @@ const Dashboard = ({ user }) => {
           <div className="loading">Cargando datos...</div>
         ) : chargesData.length > 0 ? (
           <>
-            <h3 className="chart-title">Desglone por Categoría</h3>
+            <h3 className="chart-title">Desglose por Categoría</h3>
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>

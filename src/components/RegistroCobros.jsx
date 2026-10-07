@@ -23,9 +23,7 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [usuariosDisponibles] = useState([
-    { id: user.id, email: user.email, nombre: user.user_metadata?.name || 'Yo' }
-  ])
+  const [usuariosDisponibles, setUsuariosDisponibles] = useState([])
 
   const CATEGORIES = {
     'partido': { label: 'Partido', icon: '🏠' },
@@ -34,6 +32,34 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
     'gasolina': { label: 'Gasolina', icon: '⛽' },
     'otros': { label: 'Otros Ingresos', icon: '📝' },
   }
+
+  // CARGAR USUARIOS DESDE DB
+  useEffect(() => {
+    const cargarUsuarios = async () => {
+      try {
+        const { data, error: fetchError } = await supabase
+          .from('users')
+          .select('id, full_name')
+          .order('full_name', { ascending: true })
+
+        if (fetchError) throw fetchError
+
+        // Agregar el usuario actual al inicio
+        const usuariosConActual = [
+          { id: user.id, full_name: user.user_metadata?.name || 'Yo' },
+          ...(data || []).filter(u => u.id !== user.id)
+        ]
+
+        setUsuariosDisponibles(usuariosConActual)
+      } catch (err) {
+        console.error('Error cargando usuarios:', err)
+      }
+    }
+
+    if (user?.id) {
+      cargarUsuarios()
+    }
+  }, [user])
 
   // AUTO-SELECCIONAR USUARIO CUANDO SE ACTIVA DIVIDIR
   useEffect(() => {
@@ -164,39 +190,40 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
         }
       }
 
-      // INSERTAR CARGO
-      const chargeData = {
-        user_id: user.id,
-        category: formData.category,
-        amount: chargeAmount,
-        created_at: new Date(formData.date).toISOString(),
-        description: description,
-        details: details,
-      }
-
-      const { data: chargeResult, error: insertError } = await supabase
-        .from('charges')
-        .insert([chargeData])
-        .select()
-
-      if (insertError) throw insertError
-      if (!chargeResult || !chargeResult[0]) throw new Error('Error al crear cargo')
-
-      const chargeId = chargeResult[0].id
-
-      // CREAR DIVISIONES SI ES GASOLINA DIVIDIDO
+      // SI ES GASOLINA DIVIDIDA, CREAR UN REGISTRO POR CADA USUARIO
       if (formData.category === 'gasolina' && formData.dividirGas && formData.usuariosSeleccionados.length > 1) {
-        const divisions = formData.usuariosSeleccionados.map(usuarioId => ({
-          charge_id: chargeId,
+        const charges = formData.usuariosSeleccionados.map(usuarioId => ({
           user_id: usuarioId,
-          share_amount: chargeAmount
+          category: formData.category,
+          amount: chargeAmount,
+          created_at: new Date(formData.date).toISOString(),
+          description: description,
+          details: details,
         }))
 
-        const { error: divideError } = await supabase
-          .from('gas_divisions')
-          .insert(divisions)
+        const { error: insertError } = await supabase
+          .from('charges')
+          .insert(charges)
 
-        if (divideError) console.warn('Error en divisiones:', divideError)
+        if (insertError) throw insertError
+      } else {
+        // INSERTAR CARGO NORMAL
+        const chargeData = {
+          user_id: user.id,
+          category: formData.category,
+          amount: chargeAmount,
+          created_at: new Date(formData.date).toISOString(),
+          description: description,
+          details: details,
+        }
+
+        const { data: chargeResult, error: insertError } = await supabase
+          .from('charges')
+          .insert([chargeData])
+          .select()
+
+        if (insertError) throw insertError
+        if (!chargeResult || !chargeResult[0]) throw new Error('Error al crear cargo')
       }
 
       setSuccess(`Cobro registrado exitosamente${formData.dividirGas ? ' y dividido' : ''} ✓`)
@@ -403,7 +430,7 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
                           onChange={() => toggleUsuario(usuario.id)}
                           className="checkbox-input-small"
                         />
-                        <span className="usuario-nombre">{usuario.nombre}</span>
+                        <span className="usuario-nombre">{usuario.full_name}</span>
                       </label>
                     ))}
                   </div>
