@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import '../styles/RegistroCobros.css'
 
+const PRECIO_HORA_ENTRENAMIENTO = 10
+const HORAS_OPCIONES = Array.from({ length: 9 }, (_, i) => i) // 0h a 8h
+const MINUTOS_OPCIONES = [0, 15, 30, 45]
+
 const RegistroCobros = ({ user, onChargeAdded }) => {
   const [formData, setFormData] = useState({
     category: 'partido',
@@ -13,6 +17,8 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
     gasKm: '',                     // KM gasolina
     gasAmount: '',                 // Cantidad gastada en gasolina
     customAmount: '',              // Monto custom (arbitraje, otros)
+    trainHours: '1',     // horas de entrenamiento
+    trainMinutes: '0',   // minutos de entrenamiento
     date: new Date().toISOString().split('T')[0],
     description: '',               // Notas adicionales
     // División gasolina
@@ -82,6 +88,8 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
       gasKm: '',
       gasAmount: '',
       customAmount: '',
+      trainHours: '1',
+trainMinutes: '0',
       dividirGas: false,
       usuariosSeleccionados: []
     }))
@@ -117,8 +125,8 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
       // Montos fijos: home 30€, away 50€
       monto = formData.partType === 'home' ? 30 : 50
     } else if (formData.category === 'entrenamiento') {
-      // Monto fijo 12,50€
-      monto = 12.50
+      const totalMin = (parseInt(formData.trainHours) || 0) * 60 + (parseInt(formData.trainMinutes) || 0)
+      monto = Math.round((totalMin / 60) * PRECIO_HORA_ENTRENAMIENTO * 100) / 100
     } else if (formData.category === 'arbitraje') {
       monto = parseFloat(formData.customAmount) || 0
     } else if (formData.category === 'gasolina') {
@@ -163,11 +171,21 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
           description = `Partido ${formData.partType === 'home' ? 'Casa' : 'Fuera'} - ${formData.partLocation}`
           if (formData.rivalTeam) description += ` - ${formData.rivalTeam}`
         }
-      } else if (formData.category === 'entrenamiento') {
-        details = {}
-        if (!description) {
-          description = 'Entrenamiento'
-        }
+        } else if (formData.category === 'entrenamiento') {
+          const horas = parseInt(formData.trainHours) || 0
+          const minutos = parseInt(formData.trainMinutes) || 0
+          if (horas === 0 && minutos === 0) {
+            throw new Error('Elige una duración mayor a 0')
+          }
+          details = {
+            hours: horas,
+            minutes: minutos,
+            duration_minutes: horas * 60 + minutos,
+            hourly_rate: PRECIO_HORA_ENTRENAMIENTO
+          }
+          if (!description) {
+            description = `Entrenamiento ${horas}h ${String(minutos).padStart(2, '0')}min`
+          }
       } else if (formData.category === 'arbitraje') {
         details = { title: formData.arbitTitle }
         if (!description) {
@@ -239,6 +257,8 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
         gasKm: '',
         gasAmount: '',
         customAmount: '',
+        trainHours: '1',
+        trainMinutes: '0',
         date: new Date().toISOString().split('T')[0],
         description: '',
         dividirGas: false,
@@ -346,14 +366,41 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
         {formData.category === 'entrenamiento' && (
           <div className="form-section category-details">
             <h3 className="detail-title">Entrenamiento</h3>
+
+            <div className="detail-group">
+              <label>Duración</label>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <select
+                  name="trainHours"
+                  value={formData.trainHours}
+                  onChange={handleChange}
+                  className="detail-input"
+                >
+                  {HORAS_OPCIONES.map(h => (
+                    <option key={h} value={h}>{h} h</option>
+                  ))}
+                </select>
+
+                <select
+                  name="trainMinutes"
+                  value={formData.trainMinutes}
+                  onChange={handleChange}
+                  className="detail-input"
+                >
+                  {MINUTOS_OPCIONES.map(m => (
+                    <option key={m} value={m}>{String(m).padStart(2, '0')} min</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <div className="detail-group">
               <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', margin: '0' }}>
-                Monto fijo: <strong>12,50€</strong>
+                Tarifa: <strong>{PRECIO_HORA_ENTRENAMIENTO}€/hora</strong>
               </p>
             </div>
           </div>
         )}
-
         {/* ARBITRAJE */}
         {formData.category === 'arbitraje' && (
           <div className="form-section category-details">
