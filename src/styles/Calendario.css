@@ -1,0 +1,214 @@
+.pantalla {
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.calendario-zona {
+  height: 70dvh;
+  padding: 12px;
+  box-sizing: border-box;
+  background: var(--light-bg);
+  border-radius: 12px;
+  margin: 12px;
+}
+
+.calendario-zona .fc {
+  height: 100%;
+  background: transparent;
+  color: var(--text);
+  padding: 0;
+}
+
+.calendario-zona .fc-daygrid-day-top {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.calendario-zona .fc-col-header-cell-cushion {
+  display: block;
+  text-align: center;
+}
+
+.numero {
+  display: block;
+  font-size: 13px;
+  text-align: center;
+}
+
+.numero.otro-mes {
+  opacity: 0.25;
+}
+
+.puntos {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.punto {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.papelito {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30dvh;
+  box-sizing: border-box;
+  padding: 8px 16px 16px;
+  background: var(--light-bg);
+  color: var(--text);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  touch-action: pan-y;
+}
+
+.agarre {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin: 0 auto 8px;
+}
+
+.papelito-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cerrar {
+  background: none;
+  border: none;
+  font-size: 22px;
+  padding: 0 4px;
+  line-height: 1;
+  color: var(--text-light);
+  box-shadow: none;
+}
+
+.cerrar:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.vacio {
+  color: var(--text-light);
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.lista-cobros {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista-cobros li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--border);
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.cobro-izq {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cobro-cat {
+  display: block;
+  font-weight: 500;
+}
+
+.cobro-desc {
+  display: block;
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.calendario-zona .fc .fc-header-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.calendario-zona .fc .fc-toolbar-chunk {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendario-zona .fc .fc-toolbar-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary);
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.calendario-zona .fc .fc-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.cabecera-mes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 0;
+}
+
+.cabecera-mes button {
+  padding: 6px 14px;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 8px;
+  background: var(--secondary);
+  color: #fff;
+  box-shadow: none;
+}
+
+.cabecera-mes button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.titulo-mes {
+  min-width: 150px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--light-bg);
+  text-transform: capitalize;
+}

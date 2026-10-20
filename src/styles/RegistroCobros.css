@@ -424,3 +424,10 @@
   font-size: 12px;
   padding: 5px;
 }
+
+.contenido-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}

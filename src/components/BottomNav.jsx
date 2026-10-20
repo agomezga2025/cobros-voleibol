@@ -9,7 +9,8 @@ const BottomNav = () => {
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: '📊' },
     { id: 'registrar', label: 'Registrar', path: '/registrar', icon: '➕' },
-    { id: 'historico', label: 'Histórico', path: '/historico', icon: '📋' }
+    { id: 'historico', label: 'Histórico', path: '/historico', icon: '📋' },
+    { id: 'calendario', label: 'Calendario', path: '/calendario', icon: '📅' },
   ]
 
   const isActive = (path) => location.pathname === path

@@ -276,12 +276,12 @@ trainMinutes: '0',
   }
 
   return (
+    <div className="contenido-scroll">
     <div className="registro-container">
       <div className="registro-header">
         <h1>Registrar Cobro</h1>
         <span className="month-label">Octubre 2026</span>
       </div>
-
       {error && <div className="alert alert-error">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
@@ -580,6 +580,7 @@ trainMinutes: '0',
           </button>
         </div>
       </form>
+    </div>
     </div>
   )
 }

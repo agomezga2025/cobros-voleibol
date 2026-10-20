@@ -6,6 +6,7 @@ import Register from './components/Register'
 import Dashboard from './components/Dashboard'
 import RegistroCobros from './components/RegistroCobros'
 import Historico from './components/Historico'
+import Calendario from './components/Calendario'
 import BottomNav from './components/BottomNav'
 import './App.css'
 
@@ -68,6 +69,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard user={user} />} />
         <Route path="/registrar" element={<RegistroCobros user={user} />} />
         <Route path="/historico" element={<Historico user={user} />} />
+        <Route path="/calendario" element={<Calendario user={user} />} />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
       </Routes>
       <BottomNav />

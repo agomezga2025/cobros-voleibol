@@ -69,6 +69,7 @@ const Historico = ({ user }) => {
   }
 
   return (
+    <div className="contenido-scroll">
     <div className="historico-container">
       <div className="historico-header">
         <h1>Histórico</h1>
@@ -134,6 +135,7 @@ const Historico = ({ user }) => {
           </div>
         )}
       </div>
+    </div>
     </div>
   )
 }

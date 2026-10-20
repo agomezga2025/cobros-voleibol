@@ -144,8 +144,6 @@ const Dashboard = ({ user }) => {
         <div className="user-avatar">{userInitials}</div>
       </div>
 
-      <h1 className="dashboard-title">Dashboard</h1>
-
       <div className="chart-container">
         {loading ? (
           <div className="loading">Cargando datos...</div>
