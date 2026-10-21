@@ -1,0 +1,13 @@
+V4.2.0
+------------------------------
+21-10-2026
+------------------------------
+NUEVO: Componente FloatingMenu.jsx, botón flotante que sustituye a la barra BottomNav
+NUEVO: Menú de burbujas flotantes en abanico (Dashboard, Registrar, Histórico, Calendario)
+NUEVO: Arrastre del botón con pulsación larga; al soltarlo se pega a la pared más cercana
+NUEVO: Posición del botón guardada en localStorage y recalculada al redimensionar
+NUEVO: Estilos FloatingMenu.css con animaciones de apertura, flotación y fondo difuminado
+MEJORADO: App.jsx usa FloatingMenu en lugar de BottomNav
+MEJORADO: Cierre del menú al navegar, al tocar fuera o con Escape
+CORREGIDO: El botón flotante se desplazaba al pasar el ratón por encima (conflicto con button:hover global)
+DEPRECATED: BottomNav.jsx y BottomNav.css

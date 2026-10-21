@@ -7,8 +7,9 @@ import Dashboard from './components/Dashboard'
 import RegistroCobros from './components/RegistroCobros'
 import Historico from './components/Historico'
 import Calendario from './components/Calendario'
-import BottomNav from './components/BottomNav'
+import BottomNav from './components/FloatingMenu'
 import './App.css'
+import FloatingMenu from './components/FloatingMenu'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -72,7 +73,7 @@ function App() {
         <Route path="/calendario" element={<Calendario user={user} />} />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
       </Routes>
-      <BottomNav />
+      <FloatingMenu />
     </Router>
   )
 }
