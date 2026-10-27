@@ -81,3 +81,15 @@ input:focus, textarea:focus, select:focus {
   border-color: var(--secondary);
   box-shadow: 0 0 0 3px rgba(139, 110, 63, 0.1);
 }
+
+html,
+body {
+  background-color: #2b4a17; /* el verde de arriba de tu fondo */
+}
+
+#root {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  min-height: 100vh;
+  box-sizing: border-box;
+}

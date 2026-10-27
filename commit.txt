@@ -3,11 +3,16 @@ V4.2.1
 27-10-2026
 ------------------------------
 NUEVO: vercel.json con rewrite de todas las rutas a index.html para que React Router funcione en Vercel
-NUEVO: public/manifest.json (start_url "/", scope "/", display standalone) para abrir como web app
+NUEVO: public/manifest.json (start_url "/", scope "/", display standalone, colores #2b4a17) para abrir como web app
 NUEVO: Etiquetas apple-mobile-web-app y apple-touch-icon en index.html para iOS
+NUEVO: Fondo de la app extendido bajo la barra de estado del iPhone (viewport-fit=cover + status bar black-translucent)
+NUEVO: Márgenes de zona segura en #root con env(safe-area-inset-top/bottom) para que el contenido no quede bajo la cámara ni la barra de inicio
 MEJORADO: Icono movido a public/icon.png y declarado como image/png
 MEJORADO: index.html con lang="es"
+MEJORADO: Color de fondo #2b4a17 en html/body para que no se vea blanco detrás de la barra de estado
 CORREGIDO: Error 404 al abrir la app desde la pantalla de inicio del iPhone (se guardaba en /dashboard)
+CORREGIDO: vercel.json se había subido vacío y rompía el build en Vercel
+CORREGIDO: Franja blanca en la parte superior de la web app en iOS
 CORREGIDO: Comentario de cabecera situado antes de <!doctype html> (podía activar el modo quirks)
 ELIMINADO: Etiquetas meta de Apple duplicadas en index.html
 
