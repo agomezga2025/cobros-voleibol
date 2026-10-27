@@ -1,13 +1,33 @@
 <!doctype html>
-<html lang="en">
+<!--
+  ============================================================
+  Archivo:   index.html
+  Versión:   1.0.0
+  Última modificación: 27-10-2026
+  ------------------------------------------------------------
+  Descripción:
+    Punto de entrada de la app de cobros de voleibol.
+    - Enlaza el manifest para que, al añadirla a la pantalla
+      de inicio, arranque siempre en "/" y en modo app.
+    - Añade las etiquetas de Apple para iOS (sin barra de Safari)
+      y el icono que se muestra en la pantalla de inicio.
+  ============================================================
+-->
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/assets/icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cobros voleibol</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Cobros">
-    <link rel="apple-touch-icon" href="/src/assets/icon.png">
+
+    <!-- Icono de la pestaña y de la pantalla de inicio (archivo en /public) -->
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+
+    <!-- Web app: manifest + modo app en iOS -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Cobros" />
   </head>
   <body>
     <div id="root"></div>

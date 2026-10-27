@@ -1,3 +1,18 @@
+V4.2.1
+------------------------------
+27-10-2026
+------------------------------
+NUEVO: vercel.json con rewrite de todas las rutas a index.html para que React Router funcione en Vercel
+NUEVO: public/manifest.json (start_url "/", scope "/", display standalone) para abrir como web app
+NUEVO: Etiquetas apple-mobile-web-app y apple-touch-icon en index.html para iOS
+MEJORADO: Icono movido a public/icon.png y declarado como image/png
+MEJORADO: index.html con lang="es"
+CORREGIDO: Error 404 al abrir la app desde la pantalla de inicio del iPhone (se guardaba en /dashboard)
+CORREGIDO: Comentario de cabecera situado antes de <!doctype html> (podía activar el modo quirks)
+ELIMINADO: Etiquetas meta de Apple duplicadas en index.html
+
+
+
 V4.2.0
 ------------------------------
 21-10-2026
