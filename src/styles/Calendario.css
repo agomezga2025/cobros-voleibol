@@ -2,7 +2,7 @@
  * ============================================================
  * Archivo:   Calendario.css
  * Autor:     Alejandro Gomez Garcia
- * Versión:   1.1.0
+ * Versión:   1.2.0
  * Última modificación: 29-10-2026
  * ------------------------------------------------------------
  * Descripción:
@@ -12,17 +12,30 @@
  *   - NUEVO (1.1.0): botón verde "+ Nuevo" junto a la "×".
  *   - NUEVO (1.1.0): aviso flotante "Cobro guardado correctamente"
  *     con fade in al aparecer y fade out al desaparecer.
+ *   - CORREGIDO (1.2.0): la pantalla ocupa el alto de #root (sin
+ *     100dvh) y aplica ella misma la zona segura superior, que antes
+ *     ponía #root.
+ *   - MEJORADO (1.2.0): el calendario se reparte el alto con flex
+ *     y deja libre abajo el espacio de la hojita.
+ *   - CORREGIDO (1.2.0): la hojita deja hueco para la barra de
+ *     inicio del iPhone.
  * ============================================================
  */
 
 .pantalla {
   position: relative;
-  height: 100dvh;
+  height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+  /* Hueco libre abajo para que la hojita no tape el calendario */
+  padding-bottom: calc(30dvh + var(--safe-bottom));
 }
 
 .calendario-zona {
-  height: 70dvh;
+  flex: 1;
+  min-height: 0;
   padding: 12px;
   box-sizing: border-box;
   background: var(--light-bg);
@@ -77,9 +90,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 30dvh;
+  height: calc(30dvh + var(--safe-bottom));
   box-sizing: border-box;
-  padding: 8px 16px 16px;
+  padding: 8px 16px calc(16px + var(--safe-bottom));
   background: var(--light-bg);
   color: var(--text);
   border-radius: 16px 16px 0 0;
@@ -265,7 +278,7 @@
 /* ---------- Aviso flotante "Cobro guardado" ---------- */
 .aviso {
   position: fixed;
-  top: calc(16px + env(safe-area-inset-top));
+  top: calc(16px + var(--safe-top));
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;

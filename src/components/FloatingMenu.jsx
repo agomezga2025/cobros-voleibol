@@ -1,8 +1,9 @@
 /**
  * ============================================================
  * Archivo:   FloatingMenu.jsx
- * Versión:   1.0.1
- * Última modificación: 21-10-2026
+ * Autor:     Alejandro Gomez Garcia
+ * Versión:   1.1.0
+ * Última modificación: 29-10-2026
  * ------------------------------------------------------------
  * Descripción:
  *   Menú principal flotante de la app de cobros de voleibol
@@ -16,6 +17,12 @@
  *   - La posición se guarda en localStorage y se recalcula al
  *     redimensionar la ventana.
  *   - Se cierra al navegar, al tocar fuera o con la tecla Escape.
+ *   - NUEVO (1.1.0): tiene en cuenta las zonas seguras del móvil
+ *     (notch / isla dinámica y barra de inicio). En reposo abajo
+ *     queda justo encima de la barra de inicio, y al arrastrarlo
+ *     llega hasta el borde de la zona segura sin meterse debajo.
+ *   - MEJORADO (1.1.0): recalcula el tamaño de pantalla también al
+ *     girar el móvil y cuando cambia el viewport visual (teclado).
  * ============================================================
  */
 import React, { useState, useEffect, useRef } from 'react'
@@ -62,16 +69,62 @@ const loadAnchor = () => {
 }
 
 /**
+ * Mide las zonas seguras reales del dispositivo (en px).
+ * env(safe-area-inset-*) solo se puede leer desde CSS, así que se
+ * aplica a un elemento invisible y se lee su padding calculado.
+ */
+const readSafeInsets = () => {
+  try {
+    const probe = document.createElement('div')
+    probe.style.cssText =
+      'position:fixed;top:0;left:0;width:0;height:0;visibility:hidden;pointer-events:none;' +
+      'padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);' +
+      'padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);'
+    document.body.appendChild(probe)
+    const cs = getComputedStyle(probe)
+    const insets = {
+      top: parseFloat(cs.paddingTop) || 0,
+      bottom: parseFloat(cs.paddingBottom) || 0,
+      left: parseFloat(cs.paddingLeft) || 0,
+      right: parseFloat(cs.paddingRight) || 0,
+    }
+    probe.remove()
+    return insets
+  } catch {
+    return { top: 0, bottom: 0, left: 0, right: 0 }
+  }
+}
+
+/** Tamaño de la pantalla + zonas seguras. */
+const readViewport = () => ({
+  w: window.innerWidth,
+  h: window.innerHeight,
+  ...readSafeInsets(),
+})
+
+/**
+ * Límites para el centro del botón en reposo: separado MARGIN de cada
+ * pared, o lo que mida la zona segura si es mayor (así abajo queda justo
+ * encima de la barra de inicio del iPhone y arriba bajo la isla dinámica).
+ */
+const restBounds = (vp) => {
+  const half = FAB_SIZE / 2
+  return {
+    minX: Math.max(MARGIN, vp.left) + half,
+    maxX: vp.w - Math.max(MARGIN, vp.right) - half,
+    minY: Math.max(MARGIN, vp.top) + half,
+    maxY: vp.h - Math.max(MARGIN, vp.bottom) - half,
+  }
+}
+
+/**
  * Convierte el "ancla" (pared + posición relativa 0..1 a lo largo de ella)
  * en coordenadas del centro del botón. Así, al cambiar el tamaño de la
  * ventana, el botón sigue pegado a la misma pared y en la misma proporción.
  */
-const anchorToXY = ({ edge, offset }, w, h) => {
-  const half = FAB_SIZE / 2
-  const minX = MARGIN + half
-  const maxX = w - MARGIN - half
-  const minY = MARGIN + half
-  const maxY = h - MARGIN - half
+const anchorToXY = ({ edge, offset }, vp) => {
+  const { w, h } = vp
+  const { minX, maxX, minY, maxY } = restBounds(vp)
 
   switch (edge) {
     case 'top':
@@ -101,7 +154,8 @@ const xyToAnchor = ({ x, y }, w, h) => {
  * pantalla, de modo que siempre se abran "hacia dentro" esté donde esté
  * el botón. Después se recortan para que nunca se salgan de la pantalla.
  */
-const getBubblePositions = (center, count, w, h) => {
+const getBubblePositions = (center, count, vp) => {
+  const { w, h } = vp
   const baseAngle = Math.atan2(h / 2 - center.y, w / 2 - center.x)
   const spread = (SPREAD_DEG * Math.PI) / 180
   const halfX = Math.max(BUBBLE_SIZE / 2, LABEL_HALF_WIDTH) + 8
@@ -111,8 +165,12 @@ const getBubblePositions = (center, count, w, h) => {
     const t = count === 1 ? 0 : i / (count - 1) - 0.5 // de -0.5 a 0.5
     const angle = baseAngle + t * spread
     return {
-      x: clamp(center.x + Math.cos(angle) * RADIUS, halfX, w - halfX),
-      y: clamp(center.y + Math.sin(angle) * RADIUS, halfY, h - halfY - LABEL_HEIGHT),
+      x: clamp(center.x + Math.cos(angle) * RADIUS, vp.left + halfX, w - vp.right - halfX),
+      y: clamp(
+        center.y + Math.sin(angle) * RADIUS,
+        vp.top + halfY,
+        h - vp.bottom - halfY - LABEL_HEIGHT
+      ),
     }
   })
 }
@@ -122,10 +180,7 @@ const FloatingMenu = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [viewport, setViewport] = useState({
-    w: window.innerWidth,
-    h: window.innerHeight,
-  })
+  const [viewport, setViewport] = useState(readViewport)
   const [anchor, setAnchor] = useState(loadAnchor) // posición en reposo
   const [dragPos, setDragPos] = useState(null)     // posición mientras se arrastra
   const [isOpen, setIsOpen] = useState(false)
@@ -137,12 +192,18 @@ const FloatingMenu = () => {
   const isDragging = useRef(false)
   const pressCancelled = useRef(false)
 
-  // Recalcular al redimensionar / girar el móvil
+  // Recalcular al redimensionar, girar el móvil o cambiar el viewport visual
   useEffect(() => {
-    const onResize = () =>
-      setViewport({ w: window.innerWidth, h: window.innerHeight })
+    const onResize = () => setViewport(readViewport())
+    const vv = window.visualViewport
     window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
+    window.addEventListener('orientationchange', onResize)
+    vv?.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onResize)
+      vv?.removeEventListener('resize', onResize)
+    }
   }, [])
 
   // Cerrar el menú cuando cambia la ruta
@@ -170,17 +231,28 @@ const FloatingMenu = () => {
   // Limpiar el temporizador al desmontar
   useEffect(() => () => clearTimeout(pressTimer.current), [])
 
-  const center = dragPos ?? anchorToXY(anchor, viewport.w, viewport.h)
-  const bubbles = getBubblePositions(center, TABS.length, viewport.w, viewport.h)
+  const center = dragPos ?? anchorToXY(anchor, viewport)
+  const bubbles = getBubblePositions(center, TABS.length, viewport)
 
   const isActive = (path) => location.pathname === path
 
-  /** Posición del botón siguiendo al puntero, sin salirse de la pantalla. */
+  /**
+   * Posición del botón siguiendo al puntero, sin salirse de la zona
+   * segura (ni bajo la isla dinámica ni bajo la barra de inicio).
+   */
   const getDragXY = (e) => {
     const half = FAB_SIZE / 2
     return {
-      x: clamp(e.clientX - grabOffset.current.x, half, viewport.w - half),
-      y: clamp(e.clientY - grabOffset.current.y, half, viewport.h - half),
+      x: clamp(
+        e.clientX - grabOffset.current.x,
+        viewport.left + half,
+        viewport.w - viewport.right - half
+      ),
+      y: clamp(
+        e.clientY - grabOffset.current.y,
+        viewport.top + half,
+        viewport.h - viewport.bottom - half
+      ),
     }
   }
 

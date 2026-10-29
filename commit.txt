@@ -1,3 +1,29 @@
+V4.4.0
+------------------------------
+29-10-2026
+------------------------------
+NUEVO: Variables globales --safe-top, --safe-bottom y --espacio-menu en index.css para zonas seguras y hueco del menú
+NUEVO: Clase global .contenido-scroll en index.css, cada pantalla hace scroll dentro de ella
+NUEVO: Bloqueo de zoom con dos dedos en iOS cancelando gesturestart/gesturechange/gestureend y toques multidedo en main.jsx
+NUEVO: Viewport sin zoom (maximum-scale=1, user-scalable=no) e interactive-widget=resizes-content para el teclado en Android
+NUEVO: Meta theme-color en index.html para la barra de Android
+NUEVO: FloatingMenu mide las zonas seguras reales con readSafeInsets() y no se mete bajo la isla dinámica ni la barra de inicio
+NUEVO: Cabeceras de archivo en index.css, main.jsx, Dashboard.jsx, Dashboard.css, Historico.css, RegistroCobros.css, Login.jsx y Register.jsx
+MEJORADO: Estructura base rehecha: html y body fijos sin scroll con el fondo de borde a borde y #root a pantalla completa sin márgenes
+MEJORADO: Dashboard, Login y Register envueltos en .contenido-scroll para poder desplazarse
+MEJORADO: FloatingMenu por defecto abajo justo encima de la barra de inicio y arrastrable hasta el borde de la zona segura
+MEJORADO: FloatingMenu recalcula su posición al girar el móvil y al cambiar el viewport visual
+MEJORADO: Calendario reparte el alto con flex y aplica su propia zona segura superior
+CORREGIDO: El contenido se cortaba por abajo en todas las pantallas y no se podía hacer scroll
+CORREGIDO: Margen superior doble en el Dashboard (la zona segura se sumaba en #root y en la pantalla)
+CORREGIDO: Zoom automático al tocar campos en iOS que se quedaba puesto (campos a 16px)
+CORREGIDO: La hojita del Calendario quedaba bajo la barra de inicio del iPhone
+CORREGIDO: Estilos .total-label, .loading y .no-data se pisaban entre pantallas ('Total mes' salía oscuro en el Dashboard)
+ELIMINADO: Bloqueo de scroll global y min-height 100vh en html, body, #root y contenedores de pantalla
+ELIMINADO: Padding de zona segura en #root y fondos duplicados en html, body y contenedores
+ELIMINADO: Definiciones duplicadas de .contenido-scroll en Historico.css y RegistroCobros.css
+
+
 V4.3.1
 ------------------------------
 29-10-2026

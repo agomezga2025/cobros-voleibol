@@ -1,3 +1,21 @@
+/**
+ * ============================================================
+ * Archivo:   Login.jsx
+ * Autor:     Alejandro Gomez Garcia
+ * Versión:   1.1.0
+ * Última modificación: 29-10-2026
+ * ------------------------------------------------------------
+ * Descripción:
+ *   Pantalla de inicio de sesión de la app de cobros de voleibol.
+ *   - Formulario de usuario y contraseña.
+ *   - Genera el email interno a partir del usuario y entra con
+ *     Supabase Auth.
+ *   - Enlace para cambiar a la pantalla de registro.
+ *   - NUEVO (1.1.0): la pantalla va dentro de .contenido-scroll,
+ *     así se puede desplazar si el teclado o una pantalla pequeña
+ *     no dejan verla entera.
+ * ============================================================
+ */
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 import '../styles/Login.css'
@@ -33,6 +51,7 @@ export default function Login({ onLoginSuccess, onToggleToRegister }) {
   }
 
   return (
+    <div className="contenido-scroll">
     <div className="login-bg">
       <div className="login-container">
         <p className="label-small">GESTOR DE COBROS</p>
@@ -88,6 +107,7 @@ export default function Login({ onLoginSuccess, onToggleToRegister }) {
           <p className="copyright">© 2026 Voleibol Coaching</p>
         </div>
       </div>
+    </div>
     </div>
   )
 }

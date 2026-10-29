@@ -1,3 +1,31 @@
+/**
+ * ============================================================
+ * Archivo:   index.css
+ * Autor:     Alejandro Gomez Garcia
+ * Versión:   1.1.0
+ * Última modificación: 29-10-2026
+ * ------------------------------------------------------------
+ * Descripción:
+ *   Estilos globales y estructura base de pantalla de la app de
+ *   cobros de voleibol (pensada para móvil en modo app).
+ *   - Variables de color y de zonas seguras (notch / isla dinámica
+ *     y barra de inicio) compartidas por todas las pantallas.
+ *   - html y body quedan fijos y sin scroll, con el fondo verde
+ *     ocupando toda la pantalla (evita el "rebote" de iOS).
+ *   - #root ocupa exactamente la pantalla, sin márgenes.
+ *   - Cada pantalla hace scroll dentro de .contenido-scroll.
+ *   - NUEVO (1.1.0): variables --safe-top, --safe-bottom y
+ *     --espacio-menu; clase global .contenido-scroll.
+ *   - NUEVO (1.1.0): bloqueo de zoom por CSS (touch-action) y
+ *     campos de texto a 16px para que iOS no haga zoom al tocarlos.
+ *   - CORREGIDO (1.1.0): se quita el padding de zona segura de
+ *     #root, que se sumaba al de cada pantalla (margen doble arriba
+ *     y franja cortada abajo).
+ *   - CORREGIDO (1.1.0): se quitan alturas contradictorias
+ *     (min-height: 100vh) y fondos duplicados en html/body/#root.
+ * ============================================================
+ */
+
 * {
   margin: 0;
   padding: 0;
@@ -12,6 +40,14 @@
   --border: #e8e6e0;
   --text: #333;
   --text-light: #666;
+
+  /* Zonas seguras del móvil (0 en dispositivos sin notch) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* Hueco libre al final de cada pantalla para que el menú
+     flotante (60px) no tape el último elemento */
+  --espacio-menu: 96px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,35 +59,56 @@
   }
 }
 
-/* BLOQUEO DE SCROLL */
+/* ------------------------------------------------------------
+   ESTRUCTURA BASE
+   html y body no hacen scroll nunca: así iOS no "rebota" la app
+   entera ni deja ver franjas blancas. El scroll lo hace cada
+   pantalla dentro de .contenido-scroll.
+   ------------------------------------------------------------ */
 html,
-body,
-#root {
+body {
   height: 100%;
-  margin: 0;
   overflow: hidden;
   overscroll-behavior: none;
-  touch-action: manipulation;
+  background-color: #2b4a17; /* mismo verde que el manifest */
+  /* Solo desplazamiento: sin zoom con dos dedos ni doble toque */
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-
-
 body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #f5f3f0 0%, #e8e6e0 100%);
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
   position: fixed;
   inset: 0;
   width: 100%;
-}
-
-html, body, #root {
-  height: 100%;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* El degradado llega a todos los bordes, también bajo la
+     barra de estado y la barra de inicio */
   background: linear-gradient(135deg, var(--primary) 0%, #1a2e0a 100%);
+  color: var(--text);
+  line-height: 1.6;
 }
 
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Contenedor con scroll de cada pantalla.
+   Las zonas seguras las aplica cada pantalla en su propio padding. */
+.contenido-scroll {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+/* ------------------------------------------------------------
+   ELEMENTOS COMUNES
+   ------------------------------------------------------------ */
 button {
   font-family: inherit;
   cursor: pointer;
@@ -60,6 +117,7 @@ button {
   padding: 12px 20px;
   font-weight: 600;
   transition: all 0.3s ease;
+  touch-action: manipulation;
 }
 
 button:hover {
@@ -67,9 +125,11 @@ button:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* 16px como mínimo: con menos, iOS hace zoom automático al tocar
+   el campo y en modo app ese zoom se queda puesto */
 input, textarea, select {
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -80,16 +140,4 @@ input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: var(--secondary);
   box-shadow: 0 0 0 3px rgba(139, 110, 63, 0.1);
-}
-
-html,
-body {
-  background-color: #2b4a17; /* el verde de arriba de tu fondo */
-}
-
-#root {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  min-height: 100vh;
-  box-sizing: border-box;
 }

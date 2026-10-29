@@ -1,3 +1,21 @@
+/**
+ * ============================================================
+ * Archivo:   Dashboard.jsx
+ * Autor:     Alejandro Gomez Garcia
+ * Versión:   1.1.0
+ * Última modificación: 29-10-2026
+ * ------------------------------------------------------------
+ * Descripción:
+ *   Pantalla "Dashboard" de la app de cobros de voleibol.
+ *   - Selector de mes (flechas y desplegable) y avatar del usuario.
+ *   - Carga desde Supabase los cobros del mes elegido y del mes
+ *     anterior, y muestra la diferencia entre ambos.
+ *   - Gráfico de donut con el total del mes y desglose por
+ *     categoría con su importe.
+ *   - NUEVO (1.1.0): la pantalla va dentro de .contenido-scroll,
+ *     así se puede desplazar y se ve el desglose completo.
+ * ============================================================
+ */
 import React, { useState, useEffect } from 'react'
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
 import { supabase } from '../supabaseClient'
@@ -108,6 +126,7 @@ const Dashboard = ({ user }) => {
   }))
 
   return (
+    <div className="contenido-scroll">
     <div className="dashboard-container">
       <div className="dashboard-header">
         <div className="month-selector">
@@ -201,6 +220,7 @@ const Dashboard = ({ user }) => {
           </div>
         )}
       </div>
+    </div>
     </div>
   )
 }

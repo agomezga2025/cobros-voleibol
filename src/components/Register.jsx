@@ -1,3 +1,21 @@
+/**
+ * ============================================================
+ * Archivo:   Register.jsx
+ * Autor:     Alejandro Gomez Garcia
+ * Versión:   1.1.0
+ * Última modificación: 29-10-2026
+ * ------------------------------------------------------------
+ * Descripción:
+ *   Pantalla de registro de la app de cobros de voleibol.
+ *   - Formulario de usuario, contraseña y confirmación.
+ *   - Valida los datos, genera el email interno y crea la cuenta
+ *     en Supabase Auth; después vuelve al login.
+ *   - Enlace para cambiar a la pantalla de login.
+ *   - NUEVO (1.1.0): la pantalla va dentro de .contenido-scroll,
+ *     así se puede desplazar si el teclado o una pantalla pequeña
+ *     no dejan verla entera.
+ * ============================================================
+ */
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 import '../styles/Login.css'
@@ -62,6 +80,7 @@ export default function Register({ onRegisterSuccess, onToggleToLogin }) {
   }
 
   return (
+    <div className="contenido-scroll">
     <div className="login-bg">
       <div className="login-container">
         <p className="label-small">GESTOR DE COBROS</p>
@@ -130,6 +149,7 @@ export default function Register({ onRegisterSuccess, onToggleToLogin }) {
           <p className="copyright">© 2026 Voleibol Coaching</p>
         </div>
       </div>
+    </div>
     </div>
   )
 }

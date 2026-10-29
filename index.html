@@ -3,7 +3,7 @@
   ============================================================
   Archivo:   index.html
   Autor:     Alejandro Gomez Garcia
-  Versión:   1.1.0
+  Versión:   1.2.0
   Última modificación: 29-10-2026
   ------------------------------------------------------------
   Descripción:
@@ -15,12 +15,22 @@
     - NUEVO (1.1.0): iconos nuevos (favicon-32.png para la pestaña
       y apple-touch-icon.png de 180x180 para iOS), en /public.
     - ELIMINADO (1.1.0): enlaces duplicados al icono antiguo icon.png.
+    - NUEVO (1.2.0): viewport sin zoom (maximum-scale=1 y
+      user-scalable=no). iOS lo usa para no ampliar al tocar un
+      campo y Android para bloquear el pellizco.
+    - NUEVO (1.2.0): interactive-widget=resizes-content para que en
+      Android el teclado encoja la pantalla y no tape los campos.
+    - NUEVO (1.2.0): meta theme-color para la barra de Android.
   ============================================================
 -->
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#2b4a17" />
     <title>Cobros voleibol</title>
 
     <!-- Iconos (archivos en /public) -->
