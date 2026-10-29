@@ -2,8 +2,9 @@
 <!--
   ============================================================
   Archivo:   index.html
-  Versión:   1.0.0
-  Última modificación: 27-10-2026
+  Autor:     Alejandro Gomez Garcia
+  Versión:   1.1.0
+  Última modificación: 29-10-2026
   ------------------------------------------------------------
   Descripción:
     Punto de entrada de la app de cobros de voleibol.
@@ -11,6 +12,9 @@
       de inicio, arranque siempre en "/" y en modo app.
     - Añade las etiquetas de Apple para iOS (sin barra de Safari)
       y el icono que se muestra en la pantalla de inicio.
+    - NUEVO (1.1.0): iconos nuevos (favicon-32.png para la pestaña
+      y apple-touch-icon.png de 180x180 para iOS), en /public.
+    - ELIMINADO (1.1.0): enlaces duplicados al icono antiguo icon.png.
   ============================================================
 -->
 <html lang="es">
@@ -19,14 +23,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Cobros voleibol</title>
 
-    <!-- Icono de la pestaña y de la pantalla de inicio (archivo en /public) -->
-    <link rel="icon" type="image/png" href="/icon.png" />
-    <link rel="apple-touch-icon" href="/icon.png" />
+    <!-- Iconos (archivos en /public) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <!-- Web app: manifest + modo app en iOS -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Cobros" />
   </head>

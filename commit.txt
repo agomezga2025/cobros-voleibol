@@ -1,3 +1,17 @@
+V4.3.1
+------------------------------
+29-10-2026
+------------------------------
+NUEVO: Icono de la app (balón de voleibol con moneda de euro sobre verde #2b4a17) en public/
+NUEVO: Iconos en tamaños para móvil: icon-192.png, icon-512.png, apple-touch-icon.png (180x180) y favicon-32.png
+NUEVO: Versión maskable del icono (icon-maskable-512.png) para que Android pueda recortarlo sin cortar el dibujo
+NUEVO: Archivo vectorial original icon.svg para futuros retoques
+MEJORADO: index.html con apple-touch-icon declarado con sizes='180x180' y etiquetas meta de Apple agrupadas
+MEJORADO: Cabecera de index.html con autor y versión 1.1.0
+ELIMINADO: Enlaces duplicados al icono antiguo icon.png en index.html
+MEJORADO: manifest.json con los iconos 192, 512 y maskable en lugar de icon.png
+
+
 V4.3.0
 ------------------------------
 29-10-2026
