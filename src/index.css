@@ -2,7 +2,7 @@
  * ============================================================
  * Archivo:   index.css
  * Autor:     Alejandro Gomez Garcia
- * Versión:   1.1.0
+ * Versión:   1.1.1
  * Última modificación: 29-10-2026
  * ------------------------------------------------------------
  * Descripción:
@@ -23,6 +23,11 @@
  *     y franja cortada abajo).
  *   - CORREGIDO (1.1.0): se quitan alturas contradictorias
  *     (min-height: 100vh) y fondos duplicados en html/body/#root.
+ *   - CORREGIDO (1.1.1): franja vacía abajo en modo app de iOS.
+ *     iOS dibuja desde detrás de la barra de estado pero le resta su
+ *     altura a la ventana (793 en vez de 852 en un iPhone 16), así
+ *     que inset: 0 y 100% se quedaban cortos. En modo app, body usa
+ *     100lvh, que sí da el alto real de la pantalla.
  * ============================================================
  */
 
@@ -87,6 +92,21 @@ body {
   background: linear-gradient(135deg, var(--primary) 0%, #1a2e0a 100%);
   color: var(--text);
   line-height: 1.6;
+}
+
+/* Solo en modo app (icono de la pantalla de inicio).
+   En iOS, la ventana mide la pantalla menos la barra de estado
+   aunque se dibuje desde el borde superior, y bottom: 0 deja una
+   franja vacía abajo. 100lvh sí devuelve el alto real de la pantalla.
+   En Android standalone 100lvh coincide con la ventana, así que no
+   cambia nada. En el navegador normal no se aplica, porque ahí
+   100lvh incluiría el espacio de las barras de Safari/Chrome. */
+@media (display-mode: standalone) {
+  body {
+    bottom: auto;
+    height: 100vh;  /* respaldo para navegadores sin lvh */
+    height: 100lvh;
+  }
 }
 
 #root {

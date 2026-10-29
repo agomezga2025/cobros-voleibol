@@ -1,3 +1,12 @@
+V4.4.1
+------------------------------
+29-10-2026
+------------------------------
+CORREGIDO: Franja vacía en la parte inferior en modo app de iOS (la ventana medía 793 en vez de 852 en iPhone 16)
+CORREGIDO: En modo app (display-mode: standalone) body usa 100lvh en lugar de inset: 0 para ocupar el alto real de la pantalla
+CORREGIDO: FloatingMenu mide el alto en #root en lugar de window.innerHeight y queda justo encima de la barra de inicio
+
+
 V4.4.0
 ------------------------------
 29-10-2026

@@ -2,7 +2,7 @@
  * ============================================================
  * Archivo:   FloatingMenu.jsx
  * Autor:     Alejandro Gomez Garcia
- * Versión:   1.1.0
+ * Versión:   1.1.1
  * Última modificación: 29-10-2026
  * ------------------------------------------------------------
  * Descripción:
@@ -23,6 +23,9 @@
  *     llega hasta el borde de la zona segura sin meterse debajo.
  *   - MEJORADO (1.1.0): recalcula el tamaño de pantalla también al
  *     girar el móvil y cuando cambia el viewport visual (teclado).
+ *   - CORREGIDO (1.1.1): el alto de pantalla se mide en #root en vez
+ *     de window.innerHeight, que en modo app de iOS se queda corto y
+ *     dejaba el botón más alto de lo debido.
  * ============================================================
  */
 import React, { useState, useEffect, useRef } from 'react'
@@ -95,12 +98,22 @@ const readSafeInsets = () => {
   }
 }
 
-/** Tamaño de la pantalla + zonas seguras. */
-const readViewport = () => ({
-  w: window.innerWidth,
-  h: window.innerHeight,
-  ...readSafeInsets(),
-})
+/**
+ * Tamaño de la pantalla + zonas seguras.
+ * El alto se toma de #root y no de window.innerHeight: en modo app de
+ * iOS, innerHeight resta la barra de estado (793 en vez de 852 en un
+ * iPhone 16) y el botón quedaba demasiado alto. #root mide la pantalla
+ * real gracias al 100lvh de index.css.
+ */
+const readViewport = () => {
+  const root = document.getElementById('root')
+  const rootH = root ? root.getBoundingClientRect().height : 0
+  return {
+    w: window.innerWidth,
+    h: rootH > 0 ? rootH : window.innerHeight,
+    ...readSafeInsets(),
+  }
+}
 
 /**
  * Límites para el centro del botón en reposo: separado MARGIN de cada
