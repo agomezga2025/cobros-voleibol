@@ -1,3 +1,20 @@
+/**
+ * ============================================================
+ * Archivo:   Calendario.css
+ * Autor:     Alejandro Gomez Garcia
+ * Versión:   1.1.0
+ * Última modificación: 29-10-2026
+ * ------------------------------------------------------------
+ * Descripción:
+ *   Estilos de la pantalla "Calendario" de la app de cobros.
+ *   - Calendario mensual, puntitos de categoría y cabecera del mes.
+ *   - Hojita deslizable (papelito) con la lista de cobros del día.
+ *   - NUEVO (1.1.0): botón verde "+ Nuevo" junto a la "×".
+ *   - NUEVO (1.1.0): aviso flotante "Cobro guardado correctamente"
+ *     con fade in al aparecer y fade out al desaparecer.
+ * ============================================================
+ */
+
 .pantalla {
   position: relative;
   height: 100dvh;
@@ -84,7 +101,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+}
+
+/* Contenedor de "+ Nuevo" y "×" (no se encoge con títulos largos) */
+.papelito-acciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.nuevo {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.nuevo:hover {
+  transform: none;
+  box-shadow: none;
+  background: #229954;
+}
+
+.nuevo:active {
+  background: #1e8449;
 }
 
 .cerrar {
@@ -211,4 +260,39 @@
   font-weight: 500;
   color: var(--light-bg);
   text-transform: capitalize;
+}
+
+/* ---------- Aviso flotante "Cobro guardado" ---------- */
+.aviso {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: calc(100% - 32px);
+  box-sizing: border-box;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #27ae60;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  animation: aviso-entra 0.3s ease;
+}
+
+.aviso.saliendo {
+  animation: aviso-sale 0.3s ease forwards;
+}
+
+@keyframes aviso-entra {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes aviso-sale {
+  from { opacity: 1; transform: translate(-50%, 0); }
+  to   { opacity: 0; transform: translate(-50%, -8px); }
 }

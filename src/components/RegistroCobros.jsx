@@ -1,4 +1,31 @@
+/**
+ * ============================================================
+ * Archivo:   RegistroCobros.jsx
+ * Autor:     Alejandro Gomez Garcia
+ * Versión:   1.1.1
+ * Última modificación: 29-10-2026
+ * ------------------------------------------------------------
+ * Descripción:
+ *   Pantalla "Registrar Cobro" de la app de cobros de voleibol.
+ *   - Formulario para registrar un cobro por categoría: partido
+ *     (casa 30 € / fuera 50 €), entrenamiento (10 €/hora según
+ *     duración), arbitraje, gasolina y otros ingresos.
+ *   - Calcula el total a cobrar en tiempo real.
+ *   - En gasolina permite dividir el gasto entre varios usuarios,
+ *     creando un registro por cada uno.
+ *   - Guarda el cobro en la tabla "charges" de Supabase.
+ *   - NUEVO (1.1.0): si se llega desde el calendario (botón
+ *     "+ Nuevo"), la fecha del formulario se rellena con el día
+ *     elegido. Tras guardar, vuelve automáticamente al calendario,
+ *     que muestra el aviso de cobro guardado.
+ *   - CORREGIDO (1.1.1): la fecha de hoy se calcula con la hora
+ *     local del móvil (antes en UTC, fallaba de madrugada).
+ *   - CORREGIDO (1.1.1): el mes de la cabecera ya no está fijo;
+ *     muestra el mes y año de la fecha elegida en el formulario.
+ * ============================================================
+ */
 import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 import '../styles/RegistroCobros.css'
 
@@ -6,7 +33,26 @@ const PRECIO_HORA_ENTRENAMIENTO = 10
 const HORAS_OPCIONES = Array.from({ length: 9 }, (_, i) => i) // 0h a 8h
 const MINUTOS_OPCIONES = [0, 15, 30, 45]
 
+// Fecha de hoy en formato "AAAA-MM-DD" según la hora LOCAL del móvil
+// (el locale sueco 'sv-SE' formatea justo como AAAA-MM-DD)
+const fechaHoy = () => new Date().toLocaleDateString('sv-SE')
+
+// "2026-10-21" -> "Octubre 2026"
+const textoMes = (fecha) => {
+  if (!fecha) return ''
+  const d = new Date(fecha + 'T00:00')
+  if (isNaN(d)) return ''
+  const mes = d.toLocaleDateString('es-ES', { month: 'long' })
+  return `${mes.charAt(0).toUpperCase()}${mes.slice(1)} ${d.getFullYear()}`
+}
+
 const RegistroCobros = ({ user, onChargeAdded }) => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  // Fecha enviada desde el calendario (null si se entra desde el menú)
+  const fechaDesdeCalendario = location.state?.fecha || null
+
   const [formData, setFormData] = useState({
     category: 'partido',
     partType: 'home',              // home (30€) o away (50€)
@@ -19,7 +65,7 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
     customAmount: '',              // Monto custom (arbitraje, otros)
     trainHours: '1',     // horas de entrenamiento
     trainMinutes: '0',   // minutos de entrenamiento
-    date: new Date().toISOString().split('T')[0],
+    date: fechaDesdeCalendario || fechaHoy(),
     description: '',               // Notas adicionales
     // División gasolina
     dividirGas: false,
@@ -89,7 +135,7 @@ const RegistroCobros = ({ user, onChargeAdded }) => {
       gasAmount: '',
       customAmount: '',
       trainHours: '1',
-trainMinutes: '0',
+      trainMinutes: '0',
       dividirGas: false,
       usuariosSeleccionados: []
     }))
@@ -171,21 +217,21 @@ trainMinutes: '0',
           description = `Partido ${formData.partType === 'home' ? 'Casa' : 'Fuera'} - ${formData.partLocation}`
           if (formData.rivalTeam) description += ` - ${formData.rivalTeam}`
         }
-        } else if (formData.category === 'entrenamiento') {
-          const horas = parseInt(formData.trainHours) || 0
-          const minutos = parseInt(formData.trainMinutes) || 0
-          if (horas === 0 && minutos === 0) {
-            throw new Error('Elige una duración mayor a 0')
-          }
-          details = {
-            hours: horas,
-            minutes: minutos,
-            duration_minutes: horas * 60 + minutos,
-            hourly_rate: PRECIO_HORA_ENTRENAMIENTO
-          }
-          if (!description) {
-            description = `Entrenamiento ${horas}h ${String(minutos).padStart(2, '0')}min`
-          }
+      } else if (formData.category === 'entrenamiento') {
+        const horas = parseInt(formData.trainHours) || 0
+        const minutos = parseInt(formData.trainMinutes) || 0
+        if (horas === 0 && minutos === 0) {
+          throw new Error('Elige una duración mayor a 0')
+        }
+        details = {
+          hours: horas,
+          minutes: minutos,
+          duration_minutes: horas * 60 + minutos,
+          hourly_rate: PRECIO_HORA_ENTRENAMIENTO
+        }
+        if (!description) {
+          description = `Entrenamiento ${horas}h ${String(minutos).padStart(2, '0')}min`
+        }
       } else if (formData.category === 'arbitraje') {
         details = { title: formData.arbitTitle }
         if (!description) {
@@ -244,6 +290,18 @@ trainMinutes: '0',
         if (!chargeResult || !chargeResult[0]) throw new Error('Error al crear cargo')
       }
 
+      if (onChargeAdded) onChargeAdded()
+
+      // SI VENÍA DEL CALENDARIO, VOLVER A ÉL CON EL AVISO
+      // (replace para que "atrás" no regrese a este formulario)
+      if (fechaDesdeCalendario) {
+        navigate('/calendario', {
+          replace: true,
+          state: { cobroGuardado: true },
+        })
+        return
+      }
+
       setSuccess(`Cobro registrado exitosamente${formData.dividirGas ? ' y dividido' : ''} ✓`)
 
       // LIMPIAR FORMULARIO
@@ -259,15 +317,13 @@ trainMinutes: '0',
         customAmount: '',
         trainHours: '1',
         trainMinutes: '0',
-        date: new Date().toISOString().split('T')[0],
+        date: fechaHoy(),
         description: '',
         dividirGas: false,
         usuariosSeleccionados: [],
       })
 
       setTimeout(() => setSuccess(''), 3000)
-
-      if (onChargeAdded) onChargeAdded()
     } catch (err) {
       setError(err.message || 'Error al registrar el cobro')
     } finally {
@@ -280,7 +336,7 @@ trainMinutes: '0',
     <div className="registro-container">
       <div className="registro-header">
         <h1>Registrar Cobro</h1>
-        <span className="month-label">Octubre 2026</span>
+        <span className="month-label">{textoMes(formData.date)}</span>
       </div>
       {error && <div className="alert alert-error">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}

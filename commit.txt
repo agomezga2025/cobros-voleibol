@@ -1,3 +1,19 @@
+V4.3.0
+------------------------------
+29-10-2026
+------------------------------
+NUEVO: Botón '+ Nuevo' en la hojita del Calendario que abre RegistroCobros con la fecha del día seleccionado
+NUEVO: RegistroCobros recibe la fecha desde el calendario (state de React Router) y la usa en lugar de la fecha de hoy
+NUEVO: Vuelta automática al Calendario tras guardar un cobro iniciado desde el calendario (navigate con replace)
+NUEVO: Aviso flotante 'Cobro guardado correctamente' en el Calendario con fade in y fade out, se cierra a los 2 s o al pulsarlo
+NUEVO: Caché de cobros del Calendario a nivel de módulo que se mantiene al cambiar de pantalla y se reinicia si cambia el usuario
+NUEVO: Cabeceras de archivo (autor, versión, fecha y descripción) en Calendario.jsx, RegistroCobros.jsx y Calendario.css
+MEJORADO: El Calendario pinta la caché al instante y refresca en segundo plano los meses visibles, reflejando cobros añadidos o borrados desde cualquier pantalla
+MEJORADO: Estilos del botón verde '+ Nuevo' y del aviso flotante en Calendario.css, con zona segura superior en iOS
+CORREGIDO: La fecha de hoy en RegistroCobros se calculaba en UTC y de madrugada mostraba el día anterior
+CORREGIDO: El mes de la cabecera de RegistroCobros estaba fijo ('Octubre 2026'), ahora muestra el mes de la fecha elegida
+
+
 V4.2.1
 ------------------------------
 27-10-2026
